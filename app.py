@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request
 import sqlite3
 from datetime import date
+import os
 
+DB_PATH = os.path.join(os.path.dirname(__file__), "attendance.db")
 app = Flask(__name__)
 
 # Home Page
@@ -116,13 +118,12 @@ def test():
 @app.route('/admin')
 def admin():
 
-    conn = sqlite3.connect('attendance.db')
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM attendance")
 
     records = cursor.fetchall()
-
     conn.close()
 
     return render_template("admin.html", records=records)
